@@ -1,7 +1,5 @@
-from django.test import TestCase  # type: ignore
 from django.urls import reverse, resolve
 from recipes import views
-from recipes.models import Category, Recipe, User
 from .test_recipe_base import RecipeTestBase
 # Create your tests here.
 
