@@ -12,7 +12,7 @@ class RecipeModelTest(RecipeTestBase):
         recipe = Recipe(
             title='teste title',
             description='descrição teste',
-            slug='recoe-slug',
+            slug='recoe-slug-for-no-defaults',
             preparation_time=10,
             preparation_time_unit='Minutos',
             servings=5,
