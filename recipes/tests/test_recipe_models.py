@@ -1,4 +1,4 @@
-from .test_recipe_base import RecipeTestBase
+from .test_recipe_base import RecipeTestBase, Recipe
 from django.core.exceptions import ValidationError
 from parameterized import parameterized
 
@@ -20,3 +20,6 @@ class RecipeModelTest(RecipeTestBase):
         setattr(self.recipe, field, 'A' * (max_length + 1))
         with self.assertRaises(ValidationError):
             self.recipe.full_clean()
+
+    def test_recipe_preparation_steps_is_html_is_false_by_default(self):
+        recipe = Recipe()
