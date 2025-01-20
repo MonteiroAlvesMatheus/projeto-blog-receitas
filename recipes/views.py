@@ -1,3 +1,4 @@
+from django.http.response import Http404
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from __localcode.main import make_recipe
 from .models import Recipe
@@ -32,3 +33,12 @@ def recipe(request, id):
         'is_detail_page': True,
         'title': f'{recipe.title} |'
     })
+
+
+def search(request):
+
+    search_term = request.GET.get('search')
+
+    if not search_term:
+        raise Http404()
+    return render(request, 'recipes/pages/search.html')
