@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(forms.ModelForm):
+    password2 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Repeat your password'
+        })
+    )
+
     class Meta:
         model = User
         fields = [
@@ -12,3 +19,27 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password'
         ]
+        labels = {
+            'username': 'Username',
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+            'email': 'E-mail',
+            'password': 'Password',
+        }
+        help_texts = {
+            'email': 'The e-mail must be valid'
+        }
+        error_messages = {
+            'username': {
+                'required': 'This field must be not empty',
+            }
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'placeholder': 'Type your username here',
+                'class': 'input text-input outra-classe'
+            }),
+            'password': forms.PasswordInput(attrs={
+                'placeholder': 'Type your password here',
+            })
+        }
