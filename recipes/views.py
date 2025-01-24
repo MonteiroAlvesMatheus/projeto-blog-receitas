@@ -44,7 +44,6 @@ def recipe(request, id):
 
 
 def search(request):
-
     search_term = request.GET.get('search', '').strip()
 
     if not search_term:
