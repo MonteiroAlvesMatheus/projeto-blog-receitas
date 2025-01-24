@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 def add_attr(field, attr_name, attr_new_val):
     existing_attr = field.widget.attrs.get(attr_name, '')
-    field.widget.attr[attr_name] = f'{existing_attr} {attr_new_val}'.strip()
+    field.widget.attrs[attr_name] = f'{existing_attr} {attr_new_val}'.strip()
 
 
 def add_placeholder(field, placeholder_val):
@@ -19,6 +19,22 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['first_name'], 'Type your first name')
         add_placeholder(self.fields['last_name'], 'Type your last name')
         add_attr(self.fields['username'], 'css', 'a-css-class')
+
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Type your password'
+        }),
+        error_messages={
+            'required': 'Password must not be empty'
+        },
+        help_text=(
+            'Password must have at least one uppercase letter, '
+            'one lowercase letter and one number. The length should be '
+            'at least 8 characters'
+        )
+
+    )
 
     password2 = forms.CharField(
         required=True,
@@ -53,7 +69,7 @@ class RegisterForm(forms.ModelForm):
         }
         widgets = {
             'first_name': forms.TextInput(attrs={
-                'placeholder': 'Type your username here',
+                'placeholder': 'first name',
                 'class': 'input text-input outra-classe'
             }),
             'password': forms.PasswordInput(attrs={
