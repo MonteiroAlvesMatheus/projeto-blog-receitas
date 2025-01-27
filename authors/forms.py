@@ -67,12 +67,12 @@ class RegisterForm(forms.ModelForm):
                 'required': 'This field must be not empty',
             }
         }
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'first name',
-                'class': 'input text-input outra-classe'
-            }),
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Type your password here',
-            })
-        }
+        # widgets = {
+        #     'first_name': forms.TextInput(attrs={
+        #         'placeholder': 'first name',
+        #         'class': 'input text-input outra-classe'
+        #     }),
+        #     'password': forms.PasswordInput(attrs={
+        #         'placeholder': 'Type your password here',
+        #     })
+        # }
