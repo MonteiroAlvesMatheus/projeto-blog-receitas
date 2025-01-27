@@ -82,6 +82,10 @@ class PaginationTest(RecipeTestBase):
         self.assertEqual([17, 18, 19, 20], pagination)
 
     def test_make_pagination_range_amount_of_recipes_per_page_is_and_current_page_correct(self):  # noqa E501
+        for i in range(9):
+            recipes = self.make_recipe(  # noqa F841
+                title=f'receita{i} ', slug=f'slug-{i} ',
+                author_data={'username': f'username{i} '})
 
         with patch('recipes.views.PER_PAGES', new=3):
             response = self.client.get(reverse('recipes:home'))
