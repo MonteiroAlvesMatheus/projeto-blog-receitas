@@ -1,6 +1,6 @@
 from recipes.tests.test_recipe_base import RecipeTestBase
 from django.urls import reverse
-from utils.pagination import make_pagination_range, make_pagination
+from utils.pagination import make_pagination_range
 from unittest.mock import patch
 
 
@@ -14,7 +14,7 @@ class PaginationTest(RecipeTestBase):
         )['pagination']
         self.assertEqual([1, 2, 3, 4], pagination)
 
-    def test_first_range_is_static_if_current_page_is_less_than_middle_page(self):
+    def test_first_range_is_static_if_current_page_is_less_than_middle_page(self):  # noqa E501
         # current_page=1
         pagination = make_pagination_range(
             page_range=list(range(1, 21)),
@@ -81,11 +81,7 @@ class PaginationTest(RecipeTestBase):
         )['pagination']
         self.assertEqual([17, 18, 19, 20], pagination)
 
-    def test_make_pagination_range_amount_of_recipes_per_page_is_and_current_page_correct(self):
-        for i in range(9):
-            recipes = self.make_recipe(
-                title=f'receita{i} ', slug=f'slug-{i} ',
-                author_data={'username': f'username{i} '})
+    def test_make_pagination_range_amount_of_recipes_per_page_is_and_current_page_correct(self):  # noqa E501
 
         with patch('recipes.views.PER_PAGES', new=3):
             response = self.client.get(reverse('recipes:home'))
