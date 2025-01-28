@@ -20,7 +20,7 @@ def strong_password(password):
         raise ValidationError((
             'Password must have at least one uppercase letter, '
             'one lowercase letter and one number. The length should be '
-            'at least 8 characters',
+            'at least 8 characters.'
         ),
             code='invalid',
         )
@@ -37,6 +37,32 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['password2'], 'Repeat your password')
         add_attr(self.fields['username'], 'css', 'a-css-class')
 
+    username = forms.CharField(
+        label='Username',
+        help_text=((
+            'Mandatory. 150 characters or less. '
+            'Letters, numbers and @/./+/-/_ only.')),
+        error_messages={
+            'required': 'This field must be not empty',
+            'min_length': 'The username must have at least 4 characters',
+            'max_length': 'The username must have less then 150 characters'
+        },
+        min_length=4, max_length=150,
+    )
+    first_name = forms.CharField(
+        error_messages={'required': 'Write your first name'},
+        label='First Name'
+    )
+    last_name = forms.CharField(
+        error_messages={'required': 'Write your last name'},
+        label='Last Name'
+    )
+    email = forms.EmailField(
+        error_messages={'required': 'E-mail is required'},
+        required=True,
+        label='E-mail',
+        help_text=('The e-mail must be valid'),
+    )
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
@@ -46,7 +72,7 @@ class RegisterForm(forms.ModelForm):
         help_text=(
             'Password must have at least one uppercase letter, '
             'one lowercase letter and one number. The length should be '
-            'at least 8 characters'
+            'at least 8 characters.'
         ),
         label='Password',
         validators=[strong_password]
@@ -68,22 +94,6 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password'
         ]
-        labels = {
-            'username': 'Username',
-            'first_name': 'First Name',
-            'last_name': 'Last Name',
-            'email': 'E-mail',
-        }
-        help_texts = {
-            'email': 'The e-mail must be valid',
-            'username': ('Mandatory. 150 characters or less. '
-                         'Letters, numbers and @/./+/-/_ only.'),
-        }
-        error_messages = {
-            'username': {
-                'required': 'This field must be not empty',
-            }
-        }
         # exemple:
         # widgets = {
         #     'first_name': forms.TextInput(attrs={
@@ -95,16 +105,31 @@ class RegisterForm(forms.ModelForm):
         #     })
         # }
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+            raise ValidationError(
+                'User e-mail is already in use', code='invalid',
+            )
+
+        return email
+
     def clean(self):
         cleaned_data = super().clean()
+
         password = cleaned_data.get('password')
         password2 = cleaned_data.get('password2')
 
         if password != password2:
+            password_confirmation_error = ValidationError(
+                'Passwords must be equal',
+                code='invalid'
+            )
             raise ValidationError({
-                'password': ValidationError(
-                    'Passwords must be equal',
-                    code='invalid'
-                ),
-                'password2': 'Passwords must be equal'
+                'password': password_confirmation_error,
+                'password2': [
+                    password_confirmation_error,
+                ],
             })
