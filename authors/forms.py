@@ -84,15 +84,15 @@ class RegisterForm(forms.ModelForm):
             }
         }
         # exemple:
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'Type your first name',
-                'class': 'input text-input'
-            }),
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Type your password here',
-            })
-        }
+        # widgets = {
+        #     'first_name': forms.TextInput(attrs={
+        #         'placeholder': 'Type your first name',
+        #         'class': 'input text-input'
+        #     }),
+        #     'password': forms.PasswordInput(attrs={
+        #         'placeholder': 'Type your password here',
+        #     })
+        # }
 
     def clean_password(self):
         data = self.cleaned_data.get('password')
