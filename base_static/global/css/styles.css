@@ -350,12 +350,12 @@ h6 {
 }
 
 /* Messages */
-.messages-container{
+.messages-container {
     display: flex;
-    flex-flow: row nowrap;
-    gap: calc(var(--spacing-gutter-medium)/2);
+    flex-flow: column nowrap;
+    gap: calc(var(--spacing-gutter-medium) / 2);
 }
-
+  
 .message {
     padding: 1rem;
     border-radius: 4px;
