@@ -33,13 +33,13 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['email'], 'Type your E-mail')
         add_placeholder(self.fields['first_name'], 'Type your first name')
         add_placeholder(self.fields['last_name'], 'Type your last name')
+        add_placeholder(self.fields['password'], 'Type your password')
+        add_placeholder(self.fields['password2'], 'Repeat your password')
         add_attr(self.fields['username'], 'css', 'a-css-class')
 
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Type your password'
-        }),
+        widget=forms.PasswordInput(),
         error_messages={
             'required': 'Password must not be empty'
         },
@@ -48,15 +48,15 @@ class RegisterForm(forms.ModelForm):
             'one lowercase letter and one number. The length should be '
             'at least 8 characters'
         ),
+        label='Password',
         validators=[strong_password]
 
     )
 
     password2 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Repeat your password'
-        }),
+        widget=forms.PasswordInput(),
+        label='Password Confirmation'
     )
 
     class Meta:
@@ -73,10 +73,11 @@ class RegisterForm(forms.ModelForm):
             'first_name': 'First Name',
             'last_name': 'Last Name',
             'email': 'E-mail',
-            'password': 'Password',
         }
         help_texts = {
-            'email': 'The e-mail must be valid'
+            'email': 'The e-mail must be valid',
+            'username': ('Mandatory. 150 characters or less. '
+                         'Letters, numbers and @/./+/-/_ only.'),
         }
         error_messages = {
             'username': {
@@ -93,18 +94,6 @@ class RegisterForm(forms.ModelForm):
         #         'placeholder': 'Type your password here',
         #     })
         # }
-
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'atenção' in data:
-            raise ValidationError(
-                'Não digite "atenção" no campo password',
-                code='invalid',
-                params={'value': 'atenção'}
-            )
-
-        return data
 
     def clean(self):
         cleaned_data = super().clean()
