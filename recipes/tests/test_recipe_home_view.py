@@ -1,6 +1,8 @@
 from django.urls import reverse, resolve
 from recipes import views
 from .test_recipe_base import RecipeTestBase
+from unittest.mock import patch
+
 # Create your tests here.
 
 
@@ -44,3 +46,26 @@ class RecipeHomeViewsTest(RecipeTestBase):
             'No recipes published',
             response.content.decode('utf-8')
         )
+
+    def test_make_pagination_range_amount_of_recipes_per_page_is_and_current_page_correct(self):  # noqa E501
+        for i in range(9):
+            recipes = self.make_recipe(  # noqa F841
+                title=f'receita{i} ', slug=f'slug-{i} ',
+                author_data={'username': f'username{i} '})
+
+        with patch('recipes.views.PER_PAGES', new=3):
+            response = self.client.get(reverse('recipes:home'))
+            response_context_recipe = response.context['recipes']
+            paginator = response_context_recipe.paginator
+
+            self.assertEqual(paginator.num_pages, 3)
+            self.assertEqual(len(paginator.get_page(1)), 3)
+            self.assertEqual(len(paginator.get_page(2)), 3)
+            self.assertEqual(len(paginator.get_page(3)), 3)
+
+            response_page = self.client.get(reverse('recipes:home')+'?page=1')
+            self.assertEqual(response_page.status_code, 200)
+
+            response_invalid = self.client.get(reverse('recipes:home')+'?page=one')
+            response_context_recipe_invalid = response_invalid.context['recipes']
+            self.assertEqual(response_context_recipe_invalid.number, 1)
