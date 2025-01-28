@@ -136,3 +136,9 @@ class AuthorRegisterIntegrationTest(DjangoTestCase):
 
         # self.assertNotIn(msg, response.context['form'].errors.get('password'))
         self.assertNotIn(msg, response.content.decode('utf-8'))
+
+    def test_register_create_get_raise_error(self):
+        url = reverse('authors:create')
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)

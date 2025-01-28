@@ -96,3 +96,10 @@ class PaginationTest(RecipeTestBase):
             self.assertEqual(len(paginator.get_page(1)), 3)
             self.assertEqual(len(paginator.get_page(2)), 3)
             self.assertEqual(len(paginator.get_page(3)), 3)
+
+            response_page = self.client.get(reverse('recipes:home')+'?page=1')
+            self.assertEqual(response_page.status_code, 200)
+
+            response_invalid = self.client.get(reverse('recipes:home')+'?page=one')
+            response_context_recipe_invalid = response_invalid.context['recipes']
+            self.assertEqual(response_context_recipe_invalid.number, 1)
