@@ -2,10 +2,7 @@ from django.test import TestCase  # type: ignore
 from recipes.models import Category, Recipe, User
 
 
-class RecipeTestBase(TestCase):
-    def setUp(self):
-        return super().setUp()
-
+class RecipeMixin:
     def make_category(self, name='Category'):
         return Category.objects.create(name=name)
 
@@ -55,3 +52,17 @@ class RecipeTestBase(TestCase):
             category=self.make_category(**category_data),
             author=self.make_author(**author_data)
         )
+
+    def make_recipe_in_batch(self, qtd=10):
+        recipes = []
+        for i in range(qtd):
+            recipe = self.make_recipe(  # noqa F841
+                title=f'receita{i} ', slug=f'slug-{i} ',
+                author_data={'username': f'username{i} '})
+            recipes.append(recipe)
+        return recipes
+
+
+class RecipeTestBase(TestCase, RecipeMixin):
+    def setUp(self):
+        return super().setUp()
