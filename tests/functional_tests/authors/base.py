@@ -13,9 +13,6 @@ class AuthorsBaseTest(StaticLiveServerTestCase):
         self.browser.quit()
         return super().tearDown()
 
-    def sleep(self, second=5):
-        time.sleep(second)
-
     def get_by_placeholder(self, web_element, placeholder):
         return web_element.find_element(
             By.XPATH,

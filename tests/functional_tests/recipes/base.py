@@ -11,6 +11,3 @@ class RecipeBaseFunctionalTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
         return super().tearDown()
-
-    def sleep(self, seconds=5):
-        time.sleep(seconds)
