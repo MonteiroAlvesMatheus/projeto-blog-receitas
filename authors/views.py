@@ -108,12 +108,54 @@ def dashboard_recipe_edit(request, id):
         is_published=False,
         author=request.user,
         pk=id,
-    )
+    ).first()
 
     if not recipe:
         raise Http404()
 
-    form = RecipeForm()
+    form = RecipeForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        instance=recipe
+    )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparations_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request, 'Your recipe has been saved successfully ')
+
+    return render(
+        request,
+        'authors/pages/dashboard_recipe.html',
+        context={
+            'form': form
+        }
+    )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_create(request):
+    form = RecipeForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparations_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request, 'Your recipe has been created successfully ')
 
     return render(
         request,

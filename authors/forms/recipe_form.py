@@ -1,17 +1,41 @@
 from django import forms
-from utils.django_forms import add_placeholder
+from recipes.models import Recipe
+from utils.django_forms import add_attr
 
 
-class RecipeForm(forms.Form):
+class RecipeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # add_placeholder(self.fields['username'], 'Type your username')
-        # add_placeholder(self.fields['password'], 'Type your password')
+        add_attr(self.fields['preparation_steps'], 'class', 'span-2')
 
-    title = forms.CharField()
-    description = forms.CharField()
-    preparation_time = forms.IntegerField()
-    preparation_time_unit = forms.CharField()
-    servings = forms.IntegerField()
-    servings_unit = forms.CharField()
-    preparation_steps = forms.TextInput()
+    class Meta:
+        model = Recipe
+        fields = [
+            'title',
+            'description',
+            'preparation_time',
+            'preparation_time_unit',
+            'servings',
+            'servings_unit',
+            'preparation_steps',
+            'cover',
+        ]
+        widgets = {
+            'cover': forms.FileInput(
+                attrs={
+                    'class': 'span-2',
+                }
+            ),
+            'servings_unit': forms.Select(
+                choices=(
+                    ('Porções', 'Porções'),
+                    ('Pessoas', 'Pessoas'),
+                )
+            ),
+            'preparation_time_unit': forms.Select(
+                choices=(
+                    ('Minutos', 'Minutos'),
+                    ('Hora', 'Hora'),
+                )
+            )
+        }
