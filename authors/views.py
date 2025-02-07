@@ -84,3 +84,8 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have logged out successfully.')
     return redirect(reverse('authors:login'))
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard(request):
+    return render(request, 'authors/pages/dashboard.html')
