@@ -37,5 +37,5 @@ class RecipeForm(forms.ModelForm):
                     ('Minutos', 'Minutos'),
                     ('Hora', 'Hora'),
                 )
-            )
+            ),
         }
