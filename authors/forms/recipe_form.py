@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from recipes.models import Recipe
 from utils.django_forms import add_attr
 from collections import defaultdict
+from utils.strings import is_positive_number
 
 
 class RecipeForm(forms.ModelForm):
@@ -53,9 +54,6 @@ class RecipeForm(forms.ModelForm):
         title = cleaned_data.get('title')
         description = cleaned_data.get('description')
 
-        if len(title) < 5:
-            self._my_errors['title'].append('Must have at least 5 chars')
-
         if title == description:
             self._my_errors['title'].append('Cannot be equal to description')
             self._my_errors['description'].append('Cannot be equal to title')
@@ -65,4 +63,28 @@ class RecipeForm(forms.ModelForm):
 
         return super_clean
 
-    
+    def cleat_title(self):
+        title = self.cleaned_data.get('title')
+
+        if len(title) < 5:
+            self._my_errors['title'].append('Must have at least 5 chars')
+
+        return title
+
+    def clean_preparation_time(self):
+        field_name = 'preparation_time'
+        field_value = self.cleaned_data.get(field_name)
+
+        if not is_positive_number(field_value):
+            self._my_errors[field_name].append('Must be a positive number')
+
+        return field_value
+
+    def clean_servings(self):
+        field_name = 'servings'
+        field_value = self.cleaned_data.get(field_name)
+
+        if not is_positive_number(field_value):
+            self._my_errors[field_name].append('Must be a positive number')
+
+        return field_value
