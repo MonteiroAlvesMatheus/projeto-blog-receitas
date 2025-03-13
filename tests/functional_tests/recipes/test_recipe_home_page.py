@@ -20,7 +20,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest, RecipeMixin):
 
         recipes = self.make_recipe_in_batch()
 
-        title_needed = 'Abraticésamo'
+        title_needed = 'teste'
         recipes[0].title = title_needed
         recipes[0].save()
 

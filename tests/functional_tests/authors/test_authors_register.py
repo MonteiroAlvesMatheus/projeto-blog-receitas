@@ -109,7 +109,7 @@ class AuthorsRegisterTest(AuthorsBaseTest):
         self.get_by_placeholder(form, 'Type your first name').send_keys('Testando')
         self.get_by_placeholder(form, 'Type your last name').send_keys('Teste')
         self.get_by_placeholder(form, 'Type your username').send_keys('testeuser')
-        self.get_by_placeholder(form, 'Type your E-mail').send_keys('Testando@test.com')
+        self.get_by_placeholder(form, 'Type your E-mail').send_keys('testando@test.com')
         self.get_by_placeholder(
             form, 'Type your password').send_keys('P@ssw0rd')
         self.get_by_placeholder(
