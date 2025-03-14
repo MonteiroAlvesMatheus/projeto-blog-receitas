@@ -63,7 +63,7 @@ class RecipeForm(forms.ModelForm):
 
         return super_clean
 
-    def cleat_title(self):
+    def clean_title(self):
         title = self.cleaned_data.get('title')
 
         if len(title) < 5:
