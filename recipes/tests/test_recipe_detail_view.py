@@ -7,13 +7,13 @@ from .test_recipe_base import RecipeTestBase
 class RecipeDetailViewsTest(RecipeTestBase):
     def test_recipe_detail_view_is_correct(self):
         view = resolve(
-            reverse('recipes:recipe', kwargs={'id': 1})
+            reverse('recipes:recipe', kwargs={'pk': 1})
         )
-        self.assertIs(view.func, views.recipe)
+        self.assertIs(view.func.view_class, views.RecipeDetail)
 
     def test_recipe_detail_view_returns_status_code_404_if_not_found(self):
         response = self.client.get(
-            reverse('recipes:recipe', kwargs={'id': 1000})
+            reverse('recipes:recipe', kwargs={'pk': 1000})
         )
         self.assertEqual(response.status_code, 404)
 
@@ -23,7 +23,7 @@ class RecipeDetailViewsTest(RecipeTestBase):
         self.make_recipe(title=needed_title)
 
         response = self.client.get(
-            reverse('recipes:recipe', kwargs={'id': 1})
+            reverse('recipes:recipe', kwargs={'pk': 1})
         )
         content = response.content.decode('utf-8')
 
@@ -33,7 +33,7 @@ class RecipeDetailViewsTest(RecipeTestBase):
         recipe = self.make_recipe(is_published=False)
 
         response = self.client.get(
-            reverse('recipes:recipe', kwargs={'id': recipe.pk})
+            reverse('recipes:recipe', kwargs={'pk': recipe.pk})
         )
 
         self.assertEqual(response.status_code, 404)
