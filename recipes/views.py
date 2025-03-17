@@ -63,6 +63,9 @@ class RecipeListViewSearch(RecipeListViewBase):
     def get_queryset(self, *args, **kwargs):
         search_term = self.request.GET.get('search', '')
 
+        if not search_term:
+            raise Http404()
+
         queryset = super().get_queryset(*args, **kwargs)
 
         queryset = queryset.filter(
@@ -71,9 +74,6 @@ class RecipeListViewSearch(RecipeListViewBase):
                 Q(description__icontains=search_term),
             ), is_published=True
         )
-
-        if not queryset:
-            raise Http404()
 
         return queryset
 
