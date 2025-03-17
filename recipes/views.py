@@ -36,6 +36,61 @@ class RecipeListViewBase(ListView):
         return context
 
 
+class RecipeListViewHome(RecipeListViewBase):
+    template_name = 'recipes/pages/home.html'
+
+
+class RecipeListViewCategory(RecipeListViewBase):
+    template_name = 'recipes/pages/category.html'
+
+    def get_queryset(self, *args, **kwargs):
+
+        queryset = super().get_queryset(*args, **kwargs)
+
+        queryset = queryset.filter(
+            category__id=self.kwargs.get('category_id'), is_published=True
+        )
+
+        if not queryset:
+            raise Http404()
+
+        return queryset
+
+
+class RecipeListViewSearch(RecipeListViewBase):
+    template_name = 'recipes/pages/search.html'
+
+    def get_queryset(self, *args, **kwargs):
+        search_term = self.request.GET.get('search', '')
+
+        queryset = super().get_queryset(*args, **kwargs)
+
+        queryset = queryset.filter(
+            Q(
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term),
+            ), is_published=True
+        )
+
+        if not queryset:
+            raise Http404()
+
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+
+        context = super().get_context_data(*args, **kwargs)
+        search_term = self.request.GET.get('search', '')
+
+        context.update({
+            'page_title': f'Search for "{search_term}" |',
+            'search_term': search_term,
+            'additional_url_query': f'&search={search_term}'
+        })
+
+        return context
+
+
 def home(request):
     recipes = Recipe.objects.filter(is_published=True).order_by('-id')
 
