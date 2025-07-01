@@ -8,7 +8,7 @@ Inicialmente utilizando apenas HTML, CSS e Javascript puro foi desenvolvido a Ho
 
 ![image](https://github.com/user-attachments/assets/c6fa10c9-b19b-4074-95b5-40cf5798e57e)
 
-Utilizando Class based view, foi criado no django para renderizar as home, realizando a busca na queryset por todas as receitas cadastradas.
+Utilizando Class based view, foi criado no django para renderizar as receitas na home, realizando a busca na queryset por todas as receitas cadastradas.
 
 Além disso, foi criado a view de detalhe de cada receita, apenas clicando na receita desejada, é possível visualizá-la
 
